@@ -6,8 +6,6 @@ public struct Solver {
 		let results: [LetterResult]
 	}
 
-	private let maxDisplayedCandidates = 5
-
 	public init() {}
 
 	public func start() {
@@ -20,7 +18,9 @@ public struct Solver {
 		let allFirstGuessCandidates = wordSet.allWordsMeetingCriteriaForFirstGuess()
 		var candidatesForNextGuess = allFirstGuessCandidates
 
-		for guessIndex in 0..<5 {
+		// Run this loop for one less than `numberOfGuesses` because the user should see the
+		// full list of remaining words for the final guess/
+		for guessIndex in 0..<(Constants.numberOfGuesses - 1) {
 			let guessResults = performGuess(guessIndex: guessIndex, candidates: candidatesForNextGuess)
 			wordSet.updateWith(guess: guessResults.guess, results: guessResults.results)
 
@@ -43,7 +43,7 @@ public struct Solver {
 	// MARK: - Private helpers
 
 	private func performGuess(guessIndex: Int, candidates: Set<String>) -> GuessResults {
-		let countToDisplay = min(candidates.count, maxDisplayedCandidates)
+		let countToDisplay = min(candidates.count, Constants.maxDisplayedGuessCandidates)
 
 		print("Choose a word for guess #\(guessIndex + 1):\n")
 		var guessWords = candidates.shuffled()[0..<countToDisplay]

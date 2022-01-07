@@ -56,7 +56,7 @@ struct Prompt {
 		promptAndTransform(text, invalidEntryText: invalidEntryText) { response -> [LetterResult]? in
 			let trimmed = response.trimmingCharacters(in: .whitespacesAndNewlines)
 			let results = trimmed.compactMap(LetterResult.init(character:))
-			if results.count == 5 {
+			if results.count == Constants.numberOfLettersInWord {
 				return results
 			} else {
 				return nil

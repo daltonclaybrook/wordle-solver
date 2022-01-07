@@ -78,8 +78,8 @@ struct WordSet {
 	}
 
 	mutating func updateWith(guess: String, results: [LetterResult]) {
-		precondition(results.count == 5, "Expected results to have five elements")
-		precondition(guess.count == 5, "Expected guess to be five characters long")
+		precondition(results.count == Constants.numberOfLettersInWord, "Expected results to have five elements")
+		precondition(guess.count == Constants.numberOfLettersInWord, "Expected guess to be five characters long")
 
 		parseGuessAndUpdateCollections(guess: guess, results: results)
 		updateYellowLettersByRemovingGreenIndices()
@@ -192,7 +192,7 @@ struct WordSet {
 	private func isWordValidForYellowCharacters(word: String) -> Bool {
 		for (letter, yellow) in yellowLetters {
 			var countOfMatches = 0
-			for index in 0..<5 {
+			for index in 0..<Constants.numberOfLettersInWord {
 				let character = word[word.index(word.startIndex, offsetBy: index)]
 				guard character == letter else { continue }
 
