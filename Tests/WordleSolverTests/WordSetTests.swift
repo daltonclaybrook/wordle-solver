@@ -26,4 +26,15 @@ final class WordSetTests: XCTestCase {
 			"abcde", "apple"
 		])
 	}
+
+	func testCorrectWordsAreRemovedForYellowResult() {
+		var subject = WordSet(allWords: testWords)
+		subject.updateWith(
+			guess: "lzzzz",
+			results: [.yellow, .noMatch, .noMatch, .noMatch, .noMatch]
+		)
+		XCTAssertEqual(subject.remainingWords, [
+			"hklmn", "klmnh", "apple"
+		])
+	}
 }
