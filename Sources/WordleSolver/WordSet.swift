@@ -1,7 +1,10 @@
 enum LetterResult {
+	/// wrong letter
 	case noMatch
-	case green // right letter, right position
-	case yellow // right
+	/// right letter, right position
+	case green
+	/// right letter, wrong position
+	case yellow
 }
 
 extension LetterResult {
