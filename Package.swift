@@ -10,7 +10,12 @@ let package = Package(
 	],
     dependencies: [],
     targets: [
-        .executableTarget(name: "WordleSolver", dependencies: []),
-        .testTarget(name: "WordleSolverTests", dependencies: ["WordleSolver"])
+        .executableTarget(name: "WordleSolver", dependencies: [
+			"WordleSolverKit"
+		]),
+		.target(name: "WordleSolverKit"),
+        .testTarget(name: "WordleSolverTests", dependencies: [
+			"WordleSolverKit"
+		])
     ]
 )

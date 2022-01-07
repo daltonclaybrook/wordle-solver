@@ -1,6 +1,6 @@
 import Foundation
 
-struct Solver {
+public struct Solver {
 	struct GuessResults {
 		let guess: String
 		let results: [LetterResult]
@@ -8,7 +8,9 @@ struct Solver {
 
 	private let maxDisplayedCandidates = 5
 
-	func start() {
+	public init() {}
+
+	public func start() {
 		print("✨ Welcome to the Wordle Solver! ✨\n")
 
 		var wordSet = WordSet(
