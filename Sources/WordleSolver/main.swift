@@ -25,7 +25,7 @@ for guessIndex in 0..<5 {
 
 	var guessWord: String?
 	while guessWord == nil {
-		let choiceNumber = promptAndTransform(
+		let choiceNumber = Prompt.promptAndTransform(
 			"\nPick a number (Enter \(countToDisplay + 1) to reshuffle): ",
 			invalidEntryText: "Invalid choice, try again...",
 			transformBlock: Int.init
@@ -39,7 +39,7 @@ for guessIndex in 0..<5 {
 		} else if choiceNumber >= 1 && choiceNumber <= guessWords.count {
 			// valid choice
 			let word = guessWords[choiceNumber - 1]
-			let accepted = promptForYesNo("Enter your choice (\(word)) on Wordle. Was it accepted? (y/n): ")
+			let accepted = Prompt.promptForYesNo("Enter your choice (\(word)) on Wordle. Was it accepted? (y/n): ")
 			if accepted {
 				guessWord = word
 			}
@@ -49,7 +49,7 @@ for guessIndex in 0..<5 {
 	}
 
 	print("\nEnter a sequence of characters '_' (no match), 'g' (green), and 'y' (yellow) indicating the results from your guess on Worlde. For example, if you guessed \"FLUTE\" and the letters 'L' and 'T' were green and yellow respectively, enter: \"_g_y_\".")
-	let results = promptForGuessResult("\nEnter your results: ", invalidEntryText: "Invalid entry. The response must contain five characters, and each character should be 'g', 'y', or '_'.")
+	let results = Prompt.promptForGuessResult("\nEnter your results: ", invalidEntryText: "Invalid entry. The response must contain five characters, and each character should be 'g', 'y', or '_'.")
 	let guess = guessWord!
 	wordSet.updateWith(guess: guess, results: results)
 
