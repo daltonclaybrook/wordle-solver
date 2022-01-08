@@ -47,7 +47,7 @@ public struct Solver {
 	private func performGuess(guessIndex: Int, candidates: Set<String>, wordSet: inout WordSet) -> GuessResults {
 		let countToDisplay = min(candidates.count, Constants.maxDisplayedGuessCandidates)
 
-		print("Choose a word for guess #\(guessIndex + 1):\n")
+		print(promptTextForChoiceIndex(guessIndex))
 		var guessWords = candidates.shuffled()[0..<countToDisplay]
 		printWords(guessWords)
 
@@ -90,6 +90,18 @@ public struct Solver {
 	private func printWords<S: Sequence>(_ words: S) where S.Element == String {
 		for (index, word) in words.enumerated() {
 			print("\(index + 1)) \(word)")
+		}
+	}
+
+	private func promptTextForChoiceIndex(_ index: Int) -> String {
+		let numberWords = [
+			"first", "second", "third", "fourth", "fifth", "sixth"
+		]
+		switch index {
+		case 0...5:
+			return "Choose a word for your \(numberWords[index]) guess:\n"
+		default:
+			return "Choose a word for guess #\(index + 1):\n"
 		}
 	}
 }
