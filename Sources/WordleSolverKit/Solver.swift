@@ -21,7 +21,7 @@ public struct Solver {
 		// Run this loop for one less than `numberOfGuesses` because the user should see the
 		// full list of remaining words for the final guess/
 		for guessIndex in 0..<(Constants.numberOfGuesses - 1) {
-			let guessResults = performGuess(guessIndex: guessIndex, candidates: candidatesForNextGuess)
+			let guessResults = performGuess(guessIndex: guessIndex, candidates: candidatesForNextGuess, wordSet: &wordSet)
 			wordSet.updateWith(guess: guessResults.guess, results: guessResults.results)
 
 			candidatesForNextGuess = wordSet.remainingWords
