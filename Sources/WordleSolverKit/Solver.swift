@@ -44,7 +44,7 @@ public struct Solver {
 
 	// MARK: - Private helpers
 
-	private func performGuess(guessIndex: Int, candidates: Set<String>) -> GuessResults {
+	private func performGuess(guessIndex: Int, candidates: Set<String>, wordSet: inout WordSet) -> GuessResults {
 		let countToDisplay = min(candidates.count, Constants.maxDisplayedGuessCandidates)
 
 		print("Choose a word for guess #\(guessIndex + 1):\n")
@@ -70,6 +70,8 @@ public struct Solver {
 				let accepted = Prompt.promptForYesNo("Enter your choice (\(word)) on Wordle. Was it accepted? (y/n): ")
 				if accepted {
 					guessWord = word
+				} else {
+					wordSet.removeWord(word)
 				}
 			} else {
 				print("Invalid choice, try again...")

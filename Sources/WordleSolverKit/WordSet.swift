@@ -77,6 +77,7 @@ public struct WordSet {
 		return Set(filtered)
 	}
 
+	/// Update the list of remaining words by processing the provided guess and results
 	public mutating func updateWith(guess: String, results: [LetterResult]) {
 		precondition(results.count == Constants.numberOfLettersInWord, "Expected results to have five elements")
 		precondition(guess.count == Constants.numberOfLettersInWord, "Expected guess to be five characters long")
@@ -84,6 +85,11 @@ public struct WordSet {
 		parseGuessAndUpdateCollections(guess: guess, results: results)
 		updateYellowLettersByRemovingGreenIndices()
 		updateRemainingWords()
+	}
+
+	/// Remove this word from the list since it was not accepted by Wordle
+	public mutating func removeWord(_ word: String) {
+		remainingWords.remove(word)
 	}
 
 	// MARK: - Private helpers
