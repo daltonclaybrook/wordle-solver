@@ -37,8 +37,9 @@ public struct Solver {
 		} else if candidatesForNextGuess.count == 1 {
 			Printer.print("\nThe correct answer is:\n✨ \(candidatesForNextGuess.first!) ✨\n")
 		} else {
-			Printer.print("The remaining valid words are:")
+			Printer.print("The remaining valid words are:\n")
 			Printer.print(candidatesForNextGuess.joined(separator: "\n"))
+			Printer.print("") // newline
 		}
 	}
 
