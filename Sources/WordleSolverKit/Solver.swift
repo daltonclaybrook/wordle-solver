@@ -55,7 +55,7 @@ public struct Solver {
 		var guessWord: String?
 		while guessWord == nil {
 			let enteredWord = Prompt.prompt(
-				"\nEnter your guess, or press return without guessing to see more suggestions\n> ",
+				"\nEnter your guess, or press the return key without guessing to see more suggestions\n> ",
 				invalidEntryText: "Invalid guess. Your guess must be exactly five letters.",
 				isValidResponse: { response in
 					return response.isEmpty ||

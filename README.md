@@ -28,7 +28,7 @@ gurls
 scrag
 drows
 
-Enter your guess, or press return without guessing to see more suggestions
+Enter your guess, or press the return key without guessing to see more suggestions
 > 
 ```
 
