@@ -1,4 +1,4 @@
-enum LetterResult {
+public enum LetterResult {
 	/// wrong letter
 	case noMatch
 	/// right letter, right position
@@ -7,7 +7,7 @@ enum LetterResult {
 	case yellow
 }
 
-extension LetterResult {
+public extension LetterResult {
 	init?(character: Character) {
 		switch character {
 		case "_": self = .noMatch
@@ -33,7 +33,7 @@ struct YellowLetter {
 	var possibleIndices: Set<Int> = [0, 1, 2, 3, 4]
 }
 
-struct WordSet {
+public struct WordSet {
 	private let allWords: Set<String>
 	private(set) var remainingWords: Set<String>
 
@@ -49,7 +49,7 @@ struct WordSet {
 	/// A map of characters to their "yellow letter" representation
 	private var yellowLetters: [Character: YellowLetter] = [:]
 
-	init(allWords: Set<String>) {
+	public init(allWords: Set<String>) {
 		self.allWords = allWords
 		self.remainingWords = allWords
 	}
@@ -58,7 +58,7 @@ struct WordSet {
 	/// first guess at Wordle. These criteria are:
 	/// * Each letter is unique
 	/// * Contains exactly one vowel
-	func allWordsMeetingCriteriaForFirstGuess() -> Set<String> {
+	public func allWordsMeetingCriteriaForFirstGuess() -> Set<String> {
 		let vowels: Set<Character> = ["a", "e", "i", "o", "u"]
 		let filtered = allWords.filter { string in
 			let uniqueLetters = Set(string)
@@ -77,7 +77,7 @@ struct WordSet {
 		return Set(filtered)
 	}
 
-	mutating func updateWith(guess: String, results: [LetterResult]) {
+	public mutating func updateWith(guess: String, results: [LetterResult]) {
 		precondition(results.count == Constants.numberOfLettersInWord, "Expected results to have five elements")
 		precondition(guess.count == Constants.numberOfLettersInWord, "Expected guess to be five characters long")
 
@@ -99,6 +99,11 @@ struct WordSet {
 			switch result {
 
 			case .green:
+				guard correctLettersForIndices[index] == nil else {
+					precondition(correctLettersForIndices[index] == letter, "The correct letter for index \(index) has already been identified as \(correctLettersForIndices[index]), but the provide letter \(letter) does not match. This is an error.")
+					continue
+				}
+
 				correctLettersForIndices[index] = letter
 				guard var yellowLetter = yellowLetters[letter] else { continue }
 				if yellowLetter.minimumCount <= 1 {
@@ -215,10 +220,11 @@ struct WordSet {
 	}
 
 	private func isWordValidForIncorrectCharacters(word: String) -> Bool {
-		for letter in word {
-			guard yellowLetters[letter] == nil else {
-				// If this letter has a "yellow" counterpart, it is ignored
-				// by this function
+		for (index, letter) in word.enumerated() {
+			guard yellowLetters[letter] == nil && correctLettersForIndices[index] == nil else {
+				// If this letter has a "yellow" counterpart, or if this letter index
+				// has a correct letter already identified, this letter has already been
+				// handled and should be skipped.
 				continue
 			}
 

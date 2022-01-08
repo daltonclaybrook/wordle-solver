@@ -5,8 +5,15 @@ import PackageDescription
 
 let package = Package(
     name: "wordle-solver",
+	platforms: [
+		.iOS(.v9),
+		.tvOS(.v9),
+		.macOS(.v10_10),
+		.watchOS(.v2)
+	],
 	products: [
-		.executable(name: "wordle-solver", targets: ["WordleSolver"])
+		.executable(name: "wordle-solver", targets: ["WordleSolver"]),
+		.library(name: "WordleSolverKit", targets: ["WordleSolverKit"])
 	],
     dependencies: [],
     targets: [

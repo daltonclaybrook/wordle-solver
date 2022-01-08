@@ -32,7 +32,9 @@ public struct Solver {
 			}
 		}
 
-		if candidatesForNextGuess.count == 1 {
+		if candidatesForNextGuess.count == 0 {
+			print("There are no remaining words. Sorry! 😢")
+		} else if candidatesForNextGuess.count == 1 {
 			print("\nThe correct answer is: \(candidatesForNextGuess.first!)!")
 		} else {
 			print("The remaining valid words are:")
@@ -74,7 +76,7 @@ public struct Solver {
 			}
 		}
 
-		print("\nEnter a sequence of characters '_' (no match), 'g' (green), and 'y' (yellow) indicating the results from your guess on Worlde. For example, if you guessed \"FLUTE\" and the letters 'L' and 'T' were green and yellow respectively, enter: \"_g_y_\".")
+		print("\nEnter a sequence of characters '_' (no match), 'g' (green), and 'y' (yellow) indicating the results from your guess on Wordle. For example, if you guessed \"FLUTE\" and the letters 'L' and 'T' were green and yellow respectively, enter: \"_g_y_\".")
 
 		let results = Prompt.promptForGuessResult(
 			"\nEnter your results: ",
