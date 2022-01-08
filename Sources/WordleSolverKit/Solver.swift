@@ -9,7 +9,7 @@ public struct Solver {
 	public init() {}
 
 	public func start() {
-		print("✨ Welcome to the Wordle Solver! ✨\n")
+		Printer.print("✨ Welcome to the Wordle Solver! ✨\n")
 
 		var wordSet = WordSet(
 			allWords: Set(fiveLetterWords.components(separatedBy: "\n"))
@@ -28,17 +28,17 @@ public struct Solver {
 			if candidatesForNextGuess.count <= 1 {
 				break
 			} else {
-				print("\nThere are \(candidatesForNextGuess.count) valid words remaining!\n")
+				Printer.print("\n📝 There are \(candidatesForNextGuess.count) valid words remaining!\n")
 			}
 		}
 
 		if candidatesForNextGuess.count == 0 {
-			print("There are no remaining words. Sorry! 😢")
+			Printer.print("There are no remaining words. Sorry! 😢")
 		} else if candidatesForNextGuess.count == 1 {
-			print("\nThe correct answer is: \(candidatesForNextGuess.first!)!")
+			Printer.print("\n✅ The correct answer is:\n✨ \(candidatesForNextGuess.first!) ✨\n")
 		} else {
-			print("The remaining valid words are:")
-			print(candidatesForNextGuess.joined(separator: "\n"))
+			Printer.print("The remaining valid words are:")
+			Printer.print(candidatesForNextGuess.joined(separator: "\n"))
 		}
 	}
 
@@ -47,61 +47,63 @@ public struct Solver {
 	private func performGuess(guessIndex: Int, candidates: Set<String>, wordSet: inout WordSet) -> GuessResults {
 		let countToDisplay = min(candidates.count, Constants.maxDisplayedGuessCandidates)
 
-		print(promptTextForChoiceIndex(guessIndex))
+		Printer.print(promptTextForChoiceIndex(guessIndex, candidatesCount: candidates.count))
 		var guessWords = candidates.shuffled()[0..<countToDisplay]
-		printWords(guessWords)
+		Printer.print(guessWords.joined(separator: "\n"))
 
 		var guessWord: String?
 		while guessWord == nil {
-			let choiceNumber = Prompt.promptAndTransform(
-				"\nPick a number (Enter \(countToDisplay + 1) to reshuffle): ",
-				invalidEntryText: "Invalid choice, try again...",
-				transformBlock: Int.init
-			)
+			let enteredWord = Prompt.prompt(
+				"\nEnter your guess, or press return without guessing to see more suggestions\n> ",
+				invalidEntryText: "Invalid guess. Your guess must be exactly five letters.",
+				isValidResponse: { response in
+					return response.isEmpty ||
+					(response.allSatisfy(\.isLetter) && response.count == Constants.numberOfLettersInWord)
+				}
+			).lowercased()
 
-			if choiceNumber == countToDisplay + 1 {
+			if enteredWord.isEmpty {
 				// reshuffle
 				guessWords = candidates.shuffled()[0..<countToDisplay]
-				print("") // line break
-				printWords(guessWords)
-			} else if choiceNumber >= 1 && choiceNumber <= guessWords.count {
-				// valid choice
-				let word = guessWords[choiceNumber - 1]
-				let accepted = Prompt.promptForYesNo("Enter your choice (\(word)) on Wordle. Was it accepted? (y/n): ")
-				if accepted {
-					guessWord = word
-				} else {
-					wordSet.removeWord(word)
-				}
+				Printer.print("") // line break
+				Printer.print(guessWords.joined(separator: "\n"))
 			} else {
-				print("Invalid choice, try again...")
+				// valid choice
+				let accepted = Prompt.promptForYesNo("\nEnter your guess (\(enteredWord)) on Wordle. Was it accepted? (y/n)\n> ")
+				if accepted {
+					guessWord = enteredWord
+				} else {
+					wordSet.removeWord(enteredWord)
+				}
 			}
 		}
 
-		print("\nEnter a sequence of characters '_' (no match), 'g' (green), and 'y' (yellow) indicating the results from your guess on Wordle. For example, if you guessed \"FLUTE\" and the letters 'L' and 'T' were green and yellow respectively, enter: \"_g_y_\".")
+		Printer.print("\nEnter a sequence of characters '_' (no match), 'g' (green), and 'y' (yellow) indicating the results from your guess on Wordle. For example, if you guessed \"FLUTE\" and the letters 'L' and 'T' were green and yellow respectively, enter: \"_g_y_\".")
 
 		let results = Prompt.promptForGuessResult(
-			"\nEnter your results: ",
+			"\nEnter your results\n> ",
 			invalidEntryText: "Invalid entry. The response must contain five characters, and each character should be 'g', 'y', or '_'."
 		)
 		return GuessResults(guess: guessWord!, results: results)
 	}
 
-	private func printWords<S: Sequence>(_ words: S) where S.Element == String {
-		for (index, word) in words.enumerated() {
-			print("\(index + 1)) \(word)")
-		}
-	}
-
-	private func promptTextForChoiceIndex(_ index: Int) -> String {
+	private func promptTextForChoiceIndex(_ index: Int, candidatesCount: Int) -> String {
 		let numberWords = [
 			"first", "second", "third", "fourth", "fifth", "sixth"
 		]
+
+		let suffix: String
+		if candidatesCount <= Constants.maxDisplayedGuessCandidates {
+			suffix = "You can enter any word, but considering there are only \(candidatesCount) valid word choices left, you might want to choose one of these:\n"
+		} else {
+			suffix = "You can enter any word, but here are a few suggestions:\n"
+		}
+
 		switch index {
 		case 0...5:
-			return "Choose a word for your \(numberWords[index]) guess:\n"
+			return "Choose a word for your \(numberWords[index]) guess.\n\(suffix)"
 		default:
-			return "Choose a word for guess #\(index + 1):\n"
+			return "Choose a word for guess #\(index + 1):\n\(suffix)"
 		}
 	}
 }

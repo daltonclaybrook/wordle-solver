@@ -2,37 +2,30 @@ struct Prompt {
 	private init() {}
 
 	/// Prompt the user for input in a loop until their response is considered valid by the provided validation block
-	static func prompt(_ text: String, invalidEntryText: String? = nil, isValidResponse: (String) -> Bool) -> String {
-		while true {
-			print(text, terminator: "")
-			guard let response = readLine() else {
-				if let invalidEntryText = invalidEntryText {
-					print(invalidEntryText)
-				}
-				continue
-			}
-			if isValidResponse(response) {
-				return response
-			} else if let invalidEntryText = invalidEntryText {
-				print(invalidEntryText)
-			}
+	static func prompt(
+		_ text: String,
+		invalidEntryText: String? = nil,
+		isValidResponse: (String) -> Bool = { _ in true }
+	) -> String {
+		promptAndTransform(text, invalidEntryText: invalidEntryText) { response -> String? in
+			isValidResponse(response) ? response : nil
 		}
 	}
 
 	/// Prompt the user for input in a loop until their response can be successfully transformed by the provided block
 	static func promptAndTransform<T>(_ text: String, invalidEntryText: String? = nil, transformBlock: (String) -> T?) -> T {
 		while true {
-			print(text, terminator: "")
-			guard let response = readLine() else {
+			Printer.print(text, terminator: "")
+			guard let response = readLine()?.trimmingCharacters(in: .whitespacesAndNewlines) else {
 				if let invalidEntryText = invalidEntryText {
-					print(invalidEntryText)
+					Printer.print(invalidEntryText)
 				}
 				continue
 			}
 			if let transformed = transformBlock(response) {
 				return transformed
 			} else if let invalidEntryText = invalidEntryText {
-				print(invalidEntryText)
+				Printer.print(invalidEntryText)
 			}
 		}
 	}
