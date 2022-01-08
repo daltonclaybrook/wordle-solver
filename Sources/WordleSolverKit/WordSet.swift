@@ -100,7 +100,7 @@ public struct WordSet {
 
 			case .green:
 				guard correctLettersForIndices[index] == nil else {
-					precondition(correctLettersForIndices[index] == letter, "The correct letter for index \(index) has already been identified as \(correctLettersForIndices[index]), but the provide letter \(letter) does not match. This is an error.")
+					precondition(correctLettersForIndices[index] == letter, "The correct letter for index \(index) has already been identified as \(correctLettersForIndices[index]!), but the provide letter \(letter) does not match. This is an error.")
 					continue
 				}
 
