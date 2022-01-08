@@ -37,4 +37,20 @@ final class WordSetTests: XCTestCase {
 			"hklmn", "klmnh", "apple"
 		])
 	}
+
+	func testMultipleGuessesRemoveCorrectWords() {
+		let words: Set<String> = [
+			"sluff", "slush", "slump", "sluer", "slurb"
+		]
+		var subject = WordSet(allWords: words)
+		subject.updateWith(guess: "sluer", results: [
+			.green, .green, .green, .noMatch, .noMatch
+		])
+		XCTAssertEqual(subject.remainingWords, ["sluff", "slush", "slump"])
+
+		subject.updateWith(guess: "slush", results: [
+			.green, .green, .green, .noMatch, .noMatch
+		])
+		XCTAssertEqual(subject.remainingWords, ["sluff", "slump"])
+	}
 }
