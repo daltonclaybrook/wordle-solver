@@ -12,6 +12,26 @@ cd wordle-solver
 make install
 ```
 
+## Running the app
+
+After you've installed the app, you can run it by invoking `wordle-solver` in your terminal. You should see something like the following:
+
+```
+✨ Welcome to the Wordle Solver! ✨
+
+Choose a word for your first guess.
+You can enter any word, but here are a few suggestions:
+
+terms
+cants
+gurls
+scrag
+drows
+
+Enter your guess, or press return without guessing to see more suggestions
+> 
+```
+
 ## As a library
 
 You can bring this package into your own Swift project and use it as a library if you like.
