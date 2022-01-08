@@ -27,7 +27,9 @@ If you use a Package.swift file instead, add the following line inside of your p
 Now add WordleSolverKit as a dependency of any relevant targets:
 
 ```swift
-.target(name: "MyApp", dependencies: ["WordleSolverKit"]),
+.target(name: "MyApp", dependencies: [
+    .product(name: "WordleSolverKit", package: "wordle-solver"),
+]),
 ```
 
 ## License
