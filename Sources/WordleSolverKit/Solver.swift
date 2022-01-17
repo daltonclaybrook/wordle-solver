@@ -12,7 +12,7 @@ public struct Solver {
 		Printer.print("✨ Welcome to the Wordle Solver! ✨\n")
 
 		var wordSet = WordSet(
-			allWords: Set(fiveLetterWords.components(separatedBy: "\n"))
+			allWords: Set(answers.components(separatedBy: "\n"))
 		)
 
 		let allFirstGuessCandidates = wordSet.allWordsMeetingCriteriaForFirstGuess()
